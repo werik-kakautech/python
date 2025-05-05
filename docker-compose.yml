@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  automation:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./produtos:/app/produtos
+    environment:
+      - PYTHONUNBUFFERED=1
+      - HEADLESS=true
+    command: >
+      bash -c "xvfb-run --server-args='-screen 0 1920x1080x24' python -m unittest tests/test_saucedemo.py"
+
+  debug:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    entrypoint: /bin/bash
+    stdin_open: true
+    tty: true
